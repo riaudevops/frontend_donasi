@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import LandingPage from './views/LandingPage.vue';
-</script>
+npm</script>
 
 <template>
   <LandingPage />
