@@ -1,5 +1,9 @@
 <template>
   <div class="my-5 ms-5">
+    <div class="mb-5">
+      <h1 class="text-center">CRUD Operation</h1>
+      <hr />
+    </div>
     <!-- Button trigger modal -->
     <button
       type="button"
@@ -45,6 +49,12 @@
               v-model="insertJumlah"
               placeholder="Jumlah Donasi"
               aria-label="default input example" /><br />
+            <input
+              class="form-control"
+              type="text"
+              v-model="insertNomor"
+              placeholder="Nomor Hp"
+              aria-label="default input example" /><br />
             <div class="mb-3">
               <input
                 class="form-control"
@@ -80,16 +90,20 @@
           <th scope="col">Tanggal</th>
           <th scope="col">Jumlah</th>
           <th scope="col">Struk</th>
+          <th scope="col">No-Hp</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="data in donatur" v-bind:key="data.id">
-          <td>{{ data.id }}</td>
-          <td>{{ data.donatur }}</td>
+        <tr v-for="(data, idx) in donatur" v-bind:key="data.id">
+          <td>{{ idx + 1 }}</td>
+          <td>{{ data.nama }}</td>
           <td>{{ data.tanggal }}</td>
           <td>{{ data.jumlah }}</td>
-          <td><img :src="data.bukti" alt="struk" style="width: 150px" /></td>
+          <td>
+            <img :src="data.keterangan" alt="struk" style="width: 150px" />
+          </td>
+          <td>{{ data.nomor_hp }}</td>
           <td>
             <router-link
               :to="{ name: 'updateDonatur', params: { id: data.id } }"
@@ -98,8 +112,6 @@
             >
             <button
               type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteModal"
               v-on:click="deleteApi(data.id)"
               class="btn btn-danger">
               Delete
@@ -114,9 +126,9 @@
 import axios from 'axios';
 import { ref } from 'vue';
 
-const urlApi = 'http://localhost/donasibackend/readalldonasi.php';
-const postUrl = 'http://localhost/donasibackend/insertdonasi.php';
-const deleteUrl = 'http://localhost/donasibackend/deletebyid.php';
+const urlApi = 'http://lutproject.my.id/donasi//readalldonasi.php';
+const postUrl = 'http://lutproject.my.id/donasi//insertdonasi.php';
+const deleteUrl = 'http://lutproject.my.id/donasi//deletebyid.php';
 
 export default {
   data() {
@@ -125,8 +137,8 @@ export default {
       insertName: '',
       insertDate: '',
       insertJumlah: '',
+      insertNomor: '',
       file: '',
-      dialogDelete: false,
     };
   },
 
@@ -151,10 +163,11 @@ export default {
       this.file = this.$refs.file.files[0];
       let formData = new FormData();
 
-      formData.append('bukti', this.file);
-      formData.append('donatur', this.insertName);
+      formData.append('keterangan', this.file);
+      formData.append('nama', this.insertName);
       formData.append('tanggal', this.insertDate);
       formData.append('jumlah', this.insertJumlah);
+      formData.append('nomor_hp', this.insertNomor);
       axios
         .post(postUrl, formData, {
           headers: {
@@ -167,6 +180,7 @@ export default {
           this.insertName = '';
           this.insertDate = '';
           this.insertJumlah = '';
+          this.insertNomor;
           this.$refs.file.value = '';
         })
         .catch((err) => {
@@ -175,12 +189,12 @@ export default {
     },
 
     deleteApi(id) {
-      if (confirm('Apakah anda ingin mendelete data ?')) {
+      if (confirm('apakah kamu ingin menhapus data ?')) {
         axios
-          .delete(deleteUrl + '?id=' + id)
+          .get(deleteUrl + '?id=' + id)
           .then((resp) => {
-            this.getApi();
             console.log(resp);
+            this.getApi();
           })
           .catch((err) => {
             console.log(err);

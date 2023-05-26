@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LandingPage from '../views/LandingPage.vue';
-import TestApi from '../views/Dashboard/TestApi.vue';
 import updateDonatur from '../views/Dashboard/updateDonatur.vue';
+import dashboardAdmin from '../views/Dashboard/dashboardAdmin.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,7 +14,7 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: TestApi,
+      component: dashboardAdmin,
     },
     {
       path: '/updateDonatur:id',
