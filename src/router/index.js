@@ -17,7 +17,7 @@ const router = createRouter({
       component: dashboardAdmin,
     },
     {
-      path: '/updateDonatur:id',
+      path: '/updateDonatur',
       name: 'updateDonatur',
       component: updateDonatur,
     },

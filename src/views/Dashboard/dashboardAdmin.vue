@@ -13,7 +13,7 @@
         data-bs-target="#exampleModal">
         Tambah Donatur
       </button>
-      <button @click="logout" class="btn btn-primary">LogOut</button>
+      <button class="btn btn-primary">LogOut</button>
     </div>
 
     <!-- Modal Insert -->
@@ -73,10 +73,7 @@
               data-bs-dismiss="modal">
               Batal
             </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              v-on:click="postApi()">
+            <button type="button" class="btn btn-primary">
               Tambah Donatur
             </button>
           </div>
@@ -92,124 +89,31 @@
           <th scope="col">Nama Donatur</th>
           <th scope="col">Tanggal</th>
           <th scope="col">Jumlah</th>
-          <th scope="col">Struk</th>
           <th scope="col">No-Hp</th>
+          <th scope="col">Struk</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(data, idx) in donatur" v-bind:key="data.id">
-          <td>{{ idx + 1 }}</td>
-          <td>{{ data.nama }}</td>
-          <td>{{ data.tanggal }}</td>
-          <td>{{ data.jumlah }}</td>
+        <tr>
+          <td>1</td>
+          <td>Aji</td>
+          <td>2023-05-20</td>
+          <td>Rp.1.000.000</td>
+          <td>089618095798</td>
           <td>
-            <img :src="data.keterangan" alt="struk" style="width: 150px" />
+            <img
+              src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fid.wikipedia.org%2Fwiki%2FStruk&psig=AOvVaw04T_3L0vqUdQBLPSvVtF6U&ust=1685231393802000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCIjQmaeWlP8CFQAAAAAdAAAAABAE"
+              alt="struk"
+              style="width: 150px" />
           </td>
-          <td>{{ data.nomor_hp }}</td>
           <td>
-            <router-link
-              :to="{ name: 'updateDonatur', params: { id: data.id } }"
-              class="btn btn-warning me-3"
-              >Update</router-link
-            >
-            <button
-              type="button"
-              v-on:click="deleteApi(data.id)"
-              class="btn btn-danger">
-              Delete
-            </button>
+            <button class="btn btn-warning me-3">Update</button>
+            <button type="button" class="btn btn-danger">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
-<script>
-import axios from 'axios';
-import { ref } from 'vue';
-
-const urlApi = 'http://lutproject.my.id/donasi//readalldonasi.php';
-const postUrl = 'http://lutproject.my.id/donasi//insertdonasi.php';
-const deleteUrl = 'http://lutproject.my.id/donasi//deletebyid.php';
-
-export default {
-  data() {
-    return {
-      donatur: ref([]),
-      insertName: '',
-      insertDate: '',
-      insertJumlah: '',
-      insertNomor: '',
-      file: '',
-    };
-  },
-
-  mounted() {
-    this.getApi();
-  },
-
-  methods: {
-    getApi() {
-      axios
-        .get(urlApi)
-        .then((resp) => {
-          console.log(resp);
-          this.donatur = resp.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-
-    postApi() {
-      this.file = this.$refs.file.files[0];
-      let formData = new FormData();
-
-      formData.append('keterangan', this.file);
-      formData.append('nama', this.insertName);
-      formData.append('tanggal', this.insertDate);
-      formData.append('jumlah', this.insertJumlah);
-      formData.append('nomor_hp', this.insertNomor);
-      axios
-        .post(postUrl, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then((resp) => {
-          console.log(resp.data);
-          this.getApi();
-          this.insertName = '';
-          this.insertDate = '';
-          this.insertJumlah = '';
-          this.insertNomor = '';
-          this.$refs.file.value = '';
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-
-    deleteApi(id) {
-      if (confirm('Apakah Kamu Ingin Menghapus Data ?')) {
-        axios
-          .get(deleteUrl + '?id=' + id)
-          .then((resp) => {
-            console.log(resp);
-            this.getApi();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    },
-
-    logout() {
-      if (confirm('Apakah kamu ingin LogOut ?')) {
-        this.$router.push('/');
-      }
-    },
-  },
-};
-</script>
+<script></script>
