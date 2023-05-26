@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "id": 2,
+      "nama_donatur": "Wahyu Firmansyah",
+      "tanggal": "2022-05-02",
+      "jumlah": "10000",
+      "struk": "https://img.freepik.com/free-vector/realistic-receipt-template_23-2147938550.jpg?w=740&t=st=1684591304~exp=1684591904~hmac=3fa1d5b7c8d3a29d9c50a6a3e587575bf7f55835c245214f4a9ab76246777fca"
+    },
+    {
+      "id": 3,
+      "nama_donatur": "rahman alfajar",
+      "tanggal": "2023-05-20",
+      "jumlah": "200000",
+      "struk": "https://img.freepik.com/free-vector/realistic-receipt-template_23-2147938550.jpg?w=740&t=st=1684591304~exp=1684591904~hmac=3fa1d5b7c8d3a29d9c50a6a3e587575bf7f55835c245214f4a9ab76246777fca"
+    },
+    {
+      "id": 4,
+      "nama_donatur": "Aji ",
+      "tanggal": "2023-05-20",
+      "jumlah": "200000",
+      "struk": "https://img.freepik.com/free-vector/modern-flat-payment-receipt_23-2147911082.jpg?w=740&t=st=1684599467~exp=1684600067~hmac=43b2546bb97a321788d97e9103e454063d7354370d5bbdf4f20db2cfb9a69a4c"
+    }
+  ]
+}

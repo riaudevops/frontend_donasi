@@ -1,8 +1,7 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import LandingPage from './views/LandingPage.vue';
-npm</script>
+import { RouterView, RouterLink } from 'vue-router';
+</script>
 
 <template>
-  <LandingPage />
+  <RouterView />
 </template>
