@@ -19,6 +19,12 @@
       v-model="updateJumlah"
       placeholder="Jumlah Donasi"
       aria-label="default input example" /><br />
+    <input
+      class="form-control"
+      type="text"
+      v-model="updateNomor"
+      placeholder="Nomor HP"
+      aria-label="default input example" /><br />
     <div class="mb-3">
       <input class="form-control" type="file" ref="file" />
       <img :src="file" alt="struk" style="width: 120px; margin-top: 10px" />
@@ -42,8 +48,8 @@ import { RouterLink, RouterView } from 'vue-router';
 import axios from 'axios';
 import { ref } from 'vue';
 
-const urlSelect = 'http://localhost/donasibackend/selectbyid.php';
-const urlUpdate = 'http://localhost/donasibackend/updatebyid.php';
+const urlSelect = 'http://lutproject.my.id/donasi//selectbyid.php';
+const urlUpdate = 'http://lutproject.my.id/donasi//updatebyid.php';
 
 export default {
   data() {
@@ -52,6 +58,7 @@ export default {
       updateNameDonatur: '',
       updateTanggal: '',
       updateJumlah: '',
+      updateNomor: '',
       file: '',
     };
   },
@@ -61,24 +68,15 @@ export default {
   methods: {
     getDonatur() {
       axios
-        .post(
-          urlSelect,
-          {
-            id: this.$route.params.id,
-          },
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }
-        )
+        .post(urlSelect + '?id=' + this.$route.params.id)
         .then((resp) => {
           console.log(resp);
           this.selectDonatur = resp.data;
-          this.updateNameDonatur = this.selectDonatur.donatur;
+          this.updateNameDonatur = this.selectDonatur.nama;
           this.updateTanggal = this.selectDonatur.tanggal;
           this.updateJumlah = this.selectDonatur.jumlah;
-          this.file = this.selectDonatur.bukti;
+          this.updateNomor = this.selectDonatur.nomor_hp;
+          this.file = this.selectDonatur.keterangan;
         })
         .catch((err) => {
           console.log(err);
@@ -90,10 +88,11 @@ export default {
       let formData = new FormData();
 
       formData.append('id', this.$route.params.id);
-      formData.append('donatur', this.updateNameDonatur);
+      formData.append('nama', this.updateNameDonatur);
       formData.append('tanggal', this.updateTanggal);
       formData.append('jumlah', this.updateJumlah);
-      formData.append('bukti', this.file);
+      formData.append('nomor_hp', this.updateNomor);
+      formData.append('keterangan', this.file);
 
       axios
         .post(urlUpdate, formData, {
@@ -104,11 +103,6 @@ export default {
         .then((resp) => {
           console.log(resp.data);
           this.getDonatur();
-          // alert('data berhasil di update');
-          // this.insertName = '';
-          // this.insertDate = '';
-          // this.insertJumlah = '';
-          // this.$refs.file.value = '';
         })
         .catch((err) => {
           console.log(err);
