@@ -1,3 +1,5 @@
+<script setup>
+</script>
 <template>
     <!--navbar -->
     <nav class="navbar navbar-dark bg-dark fixed-top">
@@ -140,3 +142,4 @@
         width: 1650px;
     } */
 </style>
+
