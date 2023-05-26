@@ -1,17 +1,20 @@
 <template>
-  <div class="my-5 ms-5">
+  <div class="container my-5 ms-5">
     <div class="mb-5">
-      <h1 class="text-center">CRUD Operation</h1>
+      <h1 class="text-center">CRUD Operation Donatur</h1>
       <hr />
     </div>
     <!-- Button trigger modal -->
-    <button
-      type="button"
-      class="btn btn-primary"
-      data-bs-toggle="modal"
-      data-bs-target="#exampleModal">
-      Tambah Donatur
-    </button>
+    <div class="d-flex justify-content-between">
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal">
+        Tambah Donatur
+      </button>
+      <button @click="logout" class="btn btn-primary">LogOut</button>
+    </div>
 
     <!-- Modal Insert -->
     <div
@@ -180,7 +183,7 @@ export default {
           this.insertName = '';
           this.insertDate = '';
           this.insertJumlah = '';
-          this.insertNomor;
+          this.insertNomor = '';
           this.$refs.file.value = '';
         })
         .catch((err) => {
@@ -189,7 +192,7 @@ export default {
     },
 
     deleteApi(id) {
-      if (confirm('apakah kamu ingin menhapus data ?')) {
+      if (confirm('Apakah Kamu Ingin Menghapus Data ?')) {
         axios
           .get(deleteUrl + '?id=' + id)
           .then((resp) => {
@@ -199,6 +202,12 @@ export default {
           .catch((err) => {
             console.log(err);
           });
+      }
+    },
+
+    logout() {
+      if (confirm('Apakah kamu ingin LogOut ?')) {
+        this.$router.push('/');
       }
     },
   },

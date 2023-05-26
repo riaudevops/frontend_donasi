@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ref } from 'vue';
 
 const dataAll = 'http://lutproject.my.id/donasi//readalldonasi.php';
+const loginApi = 'http://lutproject.my.id/donasi/login.php';
 
 export default {
   data() {
@@ -10,6 +11,8 @@ export default {
       allDonatur: ref([]),
       username: '',
       password: '',
+      stts: '',
+      data: '',
     };
   },
   mounted() {
@@ -25,6 +28,34 @@ export default {
         })
         .catch((err) => {
           console.log(err);
+        });
+    },
+    login() {
+      let formData = new FormData();
+
+      formData.append('username', this.username);
+      formData.append('password', this.password);
+
+      axios
+        .post(loginApi, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((resp) => {
+          console.log(resp);
+          if (resp.status == 200 && resp.data.message == 'login berhasil!') {
+            // console.log('login berhasil');
+            localStorage.setItem('user-info', JSON.stringify(resp.data[0]));
+            this.$router.push({ name: 'dashboard' });
+          }
+          if (resp.message == 'Request failed with status code 404') {
+            console.log('gagal login');
+          }
+        })
+        .catch((err) => {
+          // console.log(err);
+          alert('Username dan Password Kamu Salah!!!');
         });
     },
   },
@@ -77,14 +108,16 @@ export default {
             </div>
             <div class="input-group mb-3">
               <input
-                type="text"
+                type="password"
                 class="form-control"
                 v-model="password"
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
                 placeholder="Password" />
             </div>
-            <button type="button" class="btn btn-primary">Login</button>
+            <button type="button" class="btn btn-primary" v-on:click="login">
+              Login
+            </button>
           </ul>
         </div>
       </div>
