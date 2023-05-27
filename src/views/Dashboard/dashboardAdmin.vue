@@ -13,7 +13,7 @@
         data-bs-target="#exampleModal">
         Tambah Donatur
       </button>
-      <button class="btn btn-primary">LogOut</button>
+      <button @click="logout" class="btn btn-primary">LogOut</button>
     </div>
 
     <!-- Modal Insert -->
@@ -37,13 +37,13 @@
             <input
               class="form-control"
               type="text"
-              v-model="insertName"
+              v-model="insertNama"
               placeholder="Nama Donatur"
               aria-label="default input example" /><br />
             <input
               class="form-control"
               type="date"
-              v-model="insertDate"
+              v-model="insertTanggal"
               placeholder="Tanggal"
               aria-label="default input example" /><br />
             <input
@@ -55,7 +55,7 @@
             <input
               class="form-control"
               type="text"
-              v-model="insertNomor"
+              v-model="insertNomorHp"
               placeholder="Nomor Hp"
               aria-label="default input example" /><br />
             <div class="mb-3">
@@ -73,7 +73,10 @@
               data-bs-dismiss="modal">
               Batal
             </button>
-            <button type="button" class="btn btn-primary">
+            <button
+              type="button"
+              class="btn btn-primary"
+              v-on:click="postDonatur()">
               Tambah Donatur
             </button>
           </div>
@@ -95,25 +98,115 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>Aji</td>
-          <td>2023-05-20</td>
-          <td>Rp.1.000.000</td>
-          <td>089618095798</td>
+        <tr v-for="(data, idx) in donatur">
+          <td>{{ idx + 1 }}</td>
+          <td>{{ data.nama }}</td>
+          <td>{{ data.tanggal }}</td>
+          <td>Rp.{{ data.jumlah }}</td>
+          <td>{{ data.nomor_hp }}</td>
           <td>
-            <img
-              src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fid.wikipedia.org%2Fwiki%2FStruk&psig=AOvVaw04T_3L0vqUdQBLPSvVtF6U&ust=1685231393802000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCIjQmaeWlP8CFQAAAAAdAAAAABAE"
-              alt="struk"
-              style="width: 150px" />
+            <img :src="data.keterangan" alt="struk" style="width: 150px" />
           </td>
           <td>
-            <button class="btn btn-warning me-3">Update</button>
-            <button type="button" class="btn btn-danger">Delete</button>
+            <router-link
+              :to="{ name: 'updateDonatur', params: { id: data.id } }"
+              class="btn btn-warning me-3"
+              >Update</router-link
+            >
+            <button
+              type="button"
+              class="btn btn-danger"
+              v-on:click="deleteDonatur(data.id)">
+              Delete
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
-<script></script>
+<script>
+import { RouterLink } from 'vue-router';
+import axios from 'axios';
+import { ref } from 'vue';
+
+const allData = 'https://lutproject.my.id/donasi/readalldonasi.php';
+const postApi = 'https://lutproject.my.id/donasi/insertdonasi.php';
+const delApi = 'http://lutproject.my.id/donasi//deletebyid.php';
+
+export default {
+  data() {
+    return {
+      donatur: ref([]),
+      insertNama: '',
+      insertTanggal: '',
+      insertJumlah: '',
+      insertNomorHp: '',
+      file: '',
+    };
+  },
+  mounted() {
+    this.readData();
+  },
+  methods: {
+    readData() {
+      axios
+        .get(allData)
+        .then((resp) => {
+          console.log(resp);
+          this.donatur = resp.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    postDonatur() {
+      this.file = this.$refs.file.files[0];
+      let formData = new FormData();
+
+      formData.append('nama', this.insertNama);
+      formData.append('tanggal', this.insertTanggal);
+      formData.append('jumlah', this.insertJumlah);
+      formData.append('nomor_hp', this.insertNomorHp);
+      formData.append('keterangan', this.file);
+
+      axios
+        .post(postApi, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((resp) => {
+          console.log(resp.data);
+          this.readData();
+          this.insertNama = '';
+          this.insertJumlah = '';
+          this.insertNomorHp = '';
+          this.insertTanggal = '';
+          this.$refs.file.value = '';
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    deleteDonatur(id) {
+      if (confirm('Apakah anda ingin mendelete data ??')) {
+        axios
+          .get(delApi + '?id=' + id)
+          .then((resp) => {
+            console.log(resp);
+            this.readData();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    },
+    logout() {
+      if (confirm('Apakah kamu ingin LogOut ?')) {
+        this.$router.push('/');
+      }
+    },
+  },
+};
+</script>

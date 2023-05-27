@@ -1,4 +1,66 @@
-<script></script>
+<script>
+import axios from 'axios';
+import { ref } from 'vue';
+
+const dataAll = 'http://lutproject.my.id/donasi//readalldonasi.php';
+const loginApi = 'http://lutproject.my.id/donasi/login.php';
+
+export default {
+  data() {
+    return {
+      allDonatur: ref([]),
+      username: '',
+      password: '',
+      stts: '',
+      data: '',
+    };
+  },
+  mounted() {
+    this.getAllDonatur();
+  },
+  methods: {
+    getAllDonatur() {
+      axios
+        .get(dataAll)
+        .then((resp) => {
+          console.log(resp);
+          this.allDonatur = resp.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    login() {
+      let formData = new FormData();
+
+      formData.append('username', this.username);
+      formData.append('password', this.password);
+
+      axios
+        .post(loginApi, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((resp) => {
+          console.log(resp);
+          if (resp.status == 200 && resp.data.message == 'login berhasil!') {
+            // console.log('login berhasil');
+            localStorage.setItem('user-info', JSON.stringify(resp.data[0]));
+            this.$router.push({ name: 'dashboard' });
+          }
+          if (resp.message == 'Request failed with status code 404') {
+            console.log('gagal login');
+          }
+        })
+        .catch((err) => {
+          // console.log(err);
+          alert('Username dan Password Kamu Salah!!!');
+        });
+    },
+  },
+};
+</script>
 <template>
   <!--navbar -->
   <nav class="navbar navbar-dark bg-dark fixed-top">
@@ -53,7 +115,9 @@
                 aria-describedby="inputGroup-sizing-default"
                 placeholder="Password" />
             </div>
-            <button type="button" class="btn btn-primary">Login</button>
+            <button type="button" class="btn btn-primary" v-on:click="login">
+              Login
+            </button>
           </ul>
         </div>
       </div>
@@ -156,17 +220,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>Aji</td>
-          <td>2023-05-20</td>
-          <td>Rp.1.000.000</td>
-          <td>089618095798</td>
+        <tr v-for="(data, idx) in allDonatur" v-bind:key="data.id">
+          <th scope="row">{{ idx + 1 }}</th>
+          <td>{{ data.nama }}</td>
+          <td>{{ data.tanggal }}</td>
+          <td>{{ data.jumlah }}</td>
+          <td>{{ data.nomor_hp }}</td>
           <td>
-            <img
-              src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fid.wikipedia.org%2Fwiki%2FStruk&psig=AOvVaw04T_3L0vqUdQBLPSvVtF6U&ust=1685231393802000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCIjQmaeWlP8CFQAAAAAdAAAAABAE"
-              alt="struk"
-              style="width: 150px" />
+            <img :src="data.keterangan" alt="struk" style="width: 100px" />
           </td>
         </tr>
       </tbody>
