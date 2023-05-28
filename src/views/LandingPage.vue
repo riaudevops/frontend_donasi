@@ -44,7 +44,7 @@ export default {
         })
         .then((resp) => {
           console.log(resp);
-          if (resp.status == 200 && resp.data.username == this.username) {
+          if (resp.status == 200 && resp.data.data.username == this.username) {
             // console.log('login berhasil');
             localStorage.setItem('user-info', JSON.stringify(resp.data[0]));
             this.$router.push({ name: 'dashboard' });
