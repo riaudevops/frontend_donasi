@@ -2,8 +2,8 @@
 import axios from 'axios';
 import { ref } from 'vue';
 
-const dataAll = 'http://lutproject.my.id/donasi//readalldonasi.php';
-const loginApi = 'http://lutproject.my.id/donasi/login.php';
+const dataAll = 'https://lutproject.my.id/donasi//readalldonasi.php';
+const loginApi = 'https://lutproject.my.id/donasi/login.php';
 
 export default {
   data() {
@@ -44,7 +44,7 @@ export default {
         })
         .then((resp) => {
           console.log(resp);
-          if (resp.status == 200 && resp.data.message == 'login berhasil!') {
+          if (resp.status == 200 && resp.data.username == this.username) {
             // console.log('login berhasil');
             localStorage.setItem('user-info', JSON.stringify(resp.data[0]));
             this.$router.push({ name: 'dashboard' });

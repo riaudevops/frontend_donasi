@@ -132,7 +132,7 @@ import { ref } from 'vue';
 
 const allData = 'https://lutproject.my.id/donasi/readalldonasi.php';
 const postApi = 'https://lutproject.my.id/donasi/insertdonasi.php';
-const delApi = 'http://lutproject.my.id/donasi//deletebyid.php';
+const delApi = 'https://lutproject.my.id/donasi//deletebyid.php';
 
 export default {
   data() {
