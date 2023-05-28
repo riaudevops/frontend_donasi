@@ -47,8 +47,8 @@ import { RouterLink } from 'vue-router';
 import axios from 'axios';
 import { ref } from 'vue';
 
-const selById = 'http://lutproject.my.id/donasi//selectbyid.php';
-const urlUpdate = 'http://lutproject.my.id/donasi//updatebyid.php';
+const selById = 'https://lutproject.my.id/donasi//selectbyid.php';
+const urlUpdate = 'https://lutproject.my.id/donasi//updatebyid.php';
 
 export default {
   data() {
